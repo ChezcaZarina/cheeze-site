@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cheeze</title>
+   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&family=DM+Serif+Display&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+  <a class="logo" href="#top">Cheeze</a>
+  <nav>
+    <a href="#mood">Mood</a>
+    <a href="#questions">Questions</a>
+    <a href="#terminal">Terminal</a>
+    <a href="#note">Note</a>
+    <a href="#links">Links</a>
+    
+  </nav>
+</header>
+
+<main id="top">
+  <div class="hero">
+    <div>
+      <h1>Hi, I’m Cheeze.</h1>
+      <p>This is my little corner of the internet where I put the things I like and practice making websites. It’s still a work in progress, but you’re welcome to look around and poke at everything.</p>
+      <a class="btn" href="#mood">How are you today?</a>
+    </div>
+      <div class="stage">
+  <div class="bubble" id="say" aria-live="polite">Pet meee!</div>
+  <svg id="cheese" viewBox="0 0 300 300" role="button" tabindex="0" aria-label="Pet the cheese">
+    <ellipse cx="150" cy="272" rx="105" ry="12" fill="#000" opacity=".25"/>
+    <g class="body">
+      <path d="M42 256 L42 170 Q42 150 62 146 L236 104 Q262 98 262 126 L262 256 Z" fill="#ffd978" stroke="#4a2c3f" stroke-width="6" stroke-linejoin="round"/>
+      <circle cx="226" cy="150" r="17" fill="#f2be4d"/>
+      <circle cx="236" cy="224" r="12" fill="#f2be4d"/>
+      <circle cx="74" cy="236" r="9" fill="#f2be4d"/>
+      <circle cx="80" cy="180" r="6" fill="#f2be4d"/>
+      <g fill="#4a2c3f">
+        <g class="eye" data-cx="122" data-cy="196"><circle cx="122" cy="196" r="11"/><circle cx="126" cy="191" r="3.6" fill="#fff"/></g>
+        <g class="eye" data-cx="186" data-cy="196"><circle cx="186" cy="196" r="11"/><circle cx="190" cy="191" r="3.6" fill="#fff"/></g>
+      </g>
+      <ellipse class="blush" cx="98" cy="220" rx="14" ry="8" fill="#ff9ebb"/>
+      <ellipse class="blush" cx="210" cy="220" rx="14" ry="8" fill="#ff9ebb"/>
+      <path d="M142 214 Q154 226 166 214" fill="none" stroke="#4a2c3f" stroke-width="5" stroke-linecap="round"/>
+    </g>
+  </svg>
+</div>
+  </div>
+          <section id="mood">
+    <h2>How We Doing?</h2>
+    <p class="sub">Whatever's going on, we're here for it.</p>
+
+    <div class="moodrow">
+      <div class="moods" id="moods" role="group" aria-label="Pick a mood"></div>
+      <button class="next" id="next" aria-label="More moods">›</button>
+    </div>
+
+    <div class="hug" id="hug" aria-live="polite">
+      <p id="hugText">Whatever you’re feeling right now is okay here.</p>
+      <button class="more" id="more" hidden>Another one</button>
+    </div>
+  </section>
+
+  <section id="questions">
+    <h2>Quick answers</h2>
+    <p class="sub">Tap a question.</p>
+    <details><summary>Why did you make this website?</summary><p>I wanted to create something of my own while learning along the way. Basically, a little personal project where I could experiment, try things out, and see what happens. And well... here we are!</p></details>
+<details><summary>Do you know how to code?</summary><p>Enough to understand the stuff I build. But if you ask me to present my code and explain every little detail, you’ve officially lost me. I know what I did... mostly.</p></details>
+<details><summary>Is this website finished?</summary><p>Depends on what my mind decides at night. One day it’s finished, the next day I’m suddenly changing everything. So, let’s just say it’s a work in progress.</p></details>
+<details><summary>Can I click everything?</summary><p>That’s literally why they’re there! Go ahead, click around and see what happens. Just don’t expect every single thing to work perfectly. I’m still learning, okay?</p></details>
+<details><summary>Will there be more updates?</summary><p>If my motivation cooperates, absolutely. New ideas are welcome. Actually finishing them is a different story.</p></details>
+<details><summary>What’s the point of this website?</summary><p>Good question... even I had to think about that. HAHAHA. It’s a little space where I can put the things I make, try random ideas, and have fun learning something new. No big mission or anything. I just wanted to make something that feels like mine.</p></details>
+
+  <section id="terminal">
+  <h2>The Command Center</h2>
+  <p class="sub">I put some commands here. Feel free to mess around.</p>
+
+  <div class="term" id="term">
+    <div class="termbar">
+      <span class="ttl">C:\Windows\System32\cmd.exe</span>
+      <span class="wc" aria-hidden="true"><b>&#8212;</b><b>&#9633;</b><b>&#10005;</b></span>
+    </div>
+    <div class="termbody" id="tBody">
+      <div id="tOut" aria-live="polite"></div>
+      <div class="game" id="tGame" hidden role="button" tabindex="0">
+        <div class="gbolt">&#9889;</div>
+        <div class="gtext" id="tGameText">WAIT FOR THE SIGNAL</div>
+        <small id="tGameSub">Click only when the terminal tells you to!</small>
+      </div>
+      <label class="tline">
+        <span class="prompt">C:\Users\Visitor&gt;</span>
+        <input id="tIn" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Type a command">
+      </label>
+    </div>
+  </div>
+  <div class="chips" id="tChips">
+    <button data-c="help">help</button>
+    <button data-c="about">about</button>
+    <button data-c="explore">explore</button>
+    <button data-c="reaction">reaction</button>
+  </div>
+</section>
+
+ <section id="note" class="envwrap">
+  <h2>A Quick Message</h2>
+  <p class="sub">I promise it's not a terms and conditions page.</p>
+  <div class="env" id="env" role="button" tabindex="0" aria-expanded="false" aria-label="Open the envelope">
+    <div class="eback"></div>
+    <div class="letter">
+      <p class="hi">Hi there! ♡</p>
+      <p>Thank you for taking the time to visit whatever you think this is! I honestly just made this for fun while trying to figure things out and see what I could come up with.</p>
+      <p>I’m still learning my way around things, so expect a few random ideas here and there. I might add more sections, change a few things, or randomly decide to redesign the whole thing if I feel like it (hopefully not at 3 AM).</p>
+      <p>For now, that’s pretty much it! Feel free to look around, and thanks again for stopping by!</p>
+      <p>Have a nice day! ♡</p>
+      <a href="#links">See my links</a>
+    </div>
+    <div class="efront"></div>
+    <div class="flap"></div>
+    <div class="seal"></div>
+  </div>
+</section>
+
+  <section id="links">
+    <h2>Find me</h2>
+    <p class="sub">My digital footprints, unfortunately. :/</p>
+    <div class="links">
+  <a href="https://www.instagram.com/chezcxaaaaa" target="_blank" rel="noopener">Instagram<small>@chezcxaaaaa</small></a>
+  <a href="https://www.tiktok.com/@swizzleeee_" target="_blank" rel="noopener">TikTok<small>@swizzleeee_</small></a>
+  <a href="https://www.facebook.com/share/1A27h3BbCD/" target="_blank" rel="noopener">Facebook<small>Chezca Zarina Bunag</small></a>
+  <a href="https://github.com/ChezcaZarina" target="_blank" rel="noopener">GitHub<small>@ChezcaZarina</small></a>
+  <a href="https://www.linkedin.com/in/chezca-zarina-bunag-328794290" target="_blank" rel="noopener">LinkedIn<small>Chezca Zarina Bunag</small></a>
+  <a href="https://discord.com/users/748518629372592160" target="_blank" rel="noopener">Discord<small>swizzle_</small></a>
+</div>
+  </section>
+</main>
+
+<footer>Built while learning HTML, CSS, and JavaScript.</footer>
+ <script src="script.js"></script>
+</body>
+</html>
