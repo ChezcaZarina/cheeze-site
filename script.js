@@ -2,21 +2,7 @@ const $ = s => document.querySelector(s);
 const eyes = [...document.querySelectorAll('.eye')];
 const svg = $('#cheese');
 
-// Eyes follow the mouse
-document.addEventListener('pointermove', e => {
-  const r = svg.getBoundingClientRect();
-  const k = r.width / 300;
-  const mx = (e.clientX - r.left) / k;
-  const my = (e.clientY - r.top) / k;
-  eyes.forEach(g => {
-    const cx = +g.dataset.cx, cy = +g.dataset.cy;
-    const a = Math.atan2(my - cy, mx - cx);
-    const d = Math.min(7, Math.hypot(mx - cx, my - cy) / 20);
-    g.style.transform = 'translate(' + Math.cos(a) * d + 'px,' + Math.sin(a) * d + 'px)';
-  });
-});
-
-// Petting the cheese
+// ===== CHEESE (home page only) =====
 const lines = ['Hehe, that tickles!', 'Have you had a snack today?', 'You’re doing okay.', 'Boop!', 'More pets, please.', 'Drink some water.', 'Rest counts too.'];
 let n = 0, timer;
 
@@ -24,108 +10,131 @@ function pet(text) {
   document.body.classList.remove('hop');
   void document.body.offsetWidth;
   document.body.classList.add('hop');
-  $('#say').textContent = typeof text === 'string' ? text : lines[n++ % lines.length];
+  const say = $('#say');                       // not on fun.html, so check first
+  if (say) say.textContent = typeof text === 'string' ? text : lines[n++ % lines.length];
   clearTimeout(timer);
   timer = setTimeout(() => document.body.classList.remove('hop'), 1200);
 }
 
-svg.addEventListener('click', () => pet());
-svg.addEventListener('keydown', e => {
-  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pet(); }
-});
+if (svg) {
+  // Eyes follow the mouse
+  document.addEventListener('pointermove', e => {
+    const r = svg.getBoundingClientRect();
+    const k = r.width / 300;
+    const mx = (e.clientX - r.left) / k;
+    const my = (e.clientY - r.top) / k;
+    eyes.forEach(g => {
+      const cx = +g.dataset.cx, cy = +g.dataset.cy;
+      const a = Math.atan2(my - cy, mx - cx);
+      const d = Math.min(7, Math.hypot(mx - cx, my - cy) / 20);
+      g.style.transform = 'translate(' + Math.cos(a) * d + 'px,' + Math.sin(a) * d + 'px)';
+    });
+  });
 
-// ===== ENVELOPE =====
-const env = $('#env');
-
-function toggleEnvelope() {
-  const open = env.classList.toggle('open');
-  env.setAttribute('aria-expanded', open);
+  svg.addEventListener('click', () => pet());
+  svg.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pet(); }
+  });
 }
 
-env.addEventListener('click', e => {
-  if (e.target.closest('.letter a')) return;
-  toggleEnvelope();
-});
+// ===== ENVELOPE (home page only) =====
+if ($('#env')) {
+  const env = $('#env');
 
-env.addEventListener('keydown', e => {
-  if (e.target === env && (e.key === 'Enter' || e.key === ' ')) {
-    e.preventDefault();
-    toggleEnvelope();
+  function toggleEnvelope() {
+    const open = env.classList.toggle('open');
+    env.setAttribute('aria-expanded', open);
   }
-});
 
-// ===== MOOD CHECK-IN =====
-const moods = [
-  { name: 'Happy', say: 'Yay! Me too!', msgs: [
-    'I’m so glad. Let yourself soak it in for a minute.',
-    'Good days count. Notice this one.',
-    'Your happy is welcome here. Save a little of it for later.' ] },
-  { name: 'Overwhelmed', say: 'One thing at a time.', msgs: [
-    'Pick just one tiny thing. Everything else can wait.',
-    'You don’t have to do it all today. Really.',
-    'Pause. Unclench your shoulders. You’re doing better than you think.' ] },
-  { name: 'Anxious', say: 'I’m right here.', msgs: [
-    'Try one slow breath in, and a longer one out. You’re safe in this moment.',
-    'You don’t have to solve everything right now. Just the next small thing.',
-    'Worries feel loud, but they aren’t always true. You’ve gotten through hard days before.' ] },
-  { name: 'Alone', say: 'I’m right here.', msgs: [
-    'You’re not as alone as it feels. I’m glad you’re here.',
-    'Feeling lonely doesn’t mean something is wrong with you. It means you want connection, and that’s human.',
-    'Maybe send one small message to someone you trust. Or just stay here a while.' ] },
-  { name: 'Sad', say: 'Sending a big squish.', msgs: [
-    'It’s okay to feel this. You don’t have to hurry it along.',
-    'I’m sorry it hurts today. You’re not alone with it.',
-    'Soft days are allowed. Be as kind to yourself as you would to a friend.' ] },
-  { name: 'Tired', say: 'Sleepy cheese hugs.', msgs: [
-    'Being tired is a signal, not a failure. Rest is allowed.',
-    'You’ve been carrying a lot. You can put some of it down.',
-    'Water, a stretch, maybe a nap. Be gentle with yourself.' ] }
-];
+  env.addEventListener('click', e => {
+    if (e.target.closest('.letter a')) return;
+    toggleEnvelope();
+  });
 
-const box = $('#moods');
-const hug = $('#hug');
-const hugText = $('#hugText');
-const more = $('#more');
-const next = $('#next');
-let current = null, idx = 0;
-
-function showMessage() {
-  hugText.textContent = current.msgs[idx % current.msgs.length];
-  hug.classList.remove('pop');
-  void hug.offsetWidth;
-  hug.classList.add('pop');
+  env.addEventListener('keydown', e => {
+    if (e.target === env && (e.key === 'Enter' || e.key === ' ')) {
+      e.preventDefault();
+      toggleEnvelope();
+    }
+  });
 }
 
-moods.forEach(m => {
-  const b = document.createElement('button');
-  b.className = 'mood';
-  b.setAttribute('aria-pressed', 'false');
-  b.textContent = m.name;
-  b.onclick = () => {
-    box.querySelectorAll('.mood').forEach(x => x.setAttribute('aria-pressed', 'false'));
-    b.setAttribute('aria-pressed', 'true');
-    current = m;
-    idx = Math.floor(Math.random() * m.msgs.length);
-    more.hidden = false;
-    showMessage();
-    pet(m.say);
-  };
-  box.appendChild(b);
-});
+// ===== MOOD CHECK-IN (fun page only) =====
+if ($('#moods')) {
+  const moods = [
+    { name: 'Happy', say: 'Yay! Me too!', msgs: [
+      'I’m so glad. Let yourself soak it in for a minute.',
+      'Good days count. Notice this one.',
+      'Your happy is welcome here. Save a little of it for later.' ] },
+    { name: 'Overwhelmed', say: 'One thing at a time.', msgs: [
+      'Pick just one tiny thing. Everything else can wait.',
+      'You don’t have to do it all today. Really.',
+      'Pause. Unclench your shoulders. You’re doing better than you think.' ] },
+    { name: 'Anxious', say: 'I’m right here.', msgs: [
+      'Try one slow breath in, and a longer one out. You’re safe in this moment.',
+      'You don’t have to solve everything right now. Just the next small thing.',
+      'Worries feel loud, but they aren’t always true. You’ve gotten through hard days before.' ] },
+    { name: 'Alone', say: 'I’m right here.', msgs: [
+      'You’re not as alone as it feels. I’m glad you’re here.',
+      'Feeling lonely doesn’t mean something is wrong with you. It means you want connection, and that’s human.',
+      'Maybe send one small message to someone you trust. Or just stay here a while.' ] },
+    { name: 'Sad', say: 'Sending a big squish.', msgs: [
+      'It’s okay to feel this. You don’t have to hurry it along.',
+      'I’m sorry it hurts today. You’re not alone with it.',
+      'Soft days are allowed. Be as kind to yourself as you would to a friend.' ] },
+    { name: 'Tired', say: 'Sleepy cheese hugs.', msgs: [
+      'Being tired is a signal, not a failure. Rest is allowed.',
+      'You’ve been carrying a lot. You can put some of it down.',
+      'Water, a stretch, maybe a nap. Be gentle with yourself.' ] }
+  ];
 
-more.onclick = () => { idx++; showMessage(); };
+  const box = $('#moods');
+  const hug = $('#hug');
+  const hugText = $('#hugText');
+  const more = $('#more');
+  const next = $('#next');
+  let current = null, idx = 0;
 
-// The › arrow scrolls the row and hides itself at the end
-function checkArrow() {
-  next.hidden = box.scrollLeft + box.clientWidth >= box.scrollWidth - 4;
+  function showMessage() {
+    hugText.textContent = current.msgs[idx % current.msgs.length];
+    hug.classList.remove('pop');
+    void hug.offsetWidth;
+    hug.classList.add('pop');
+  }
+
+  moods.forEach(m => {
+    const b = document.createElement('button');
+    b.className = 'mood';
+    b.setAttribute('aria-pressed', 'false');
+    b.textContent = m.name;
+    b.onclick = () => {
+      box.querySelectorAll('.mood').forEach(x => x.setAttribute('aria-pressed', 'false'));
+      b.setAttribute('aria-pressed', 'true');
+      current = m;
+      idx = Math.floor(Math.random() * m.msgs.length);
+      more.hidden = false;
+      showMessage();
+      pet(m.say);          // does nothing visible here, there's no cheese on this page
+    };
+    box.appendChild(b);
+  });
+
+  more.onclick = () => { idx++; showMessage(); };
+
+  // The › arrow scrolls the row and hides itself at the end
+  function checkArrow() {
+    next.hidden = box.scrollLeft + box.clientWidth >= box.scrollWidth - 4;
+  }
+  next.onclick = () => box.scrollBy({ left: box.clientWidth * .7, behavior: 'smooth' });
+  box.addEventListener('scroll', checkArrow);
+  addEventListener('resize', checkArrow);
+  addEventListener('load', checkArrow);
+  checkArrow();
 }
-next.onclick = () => box.scrollBy({ left: box.clientWidth * .7, behavior: 'smooth' });
-box.addEventListener('scroll', checkArrow);
-addEventListener('resize', checkArrow);
-addEventListener('load', checkArrow);
-checkArrow();
 
+// ===== TERMINAL + REACTION TEST (fun page only) =====
 (function () {
+  if (!$('#tOut')) return;
   const tOut = $('#tOut'), tIn = $('#tIn'), tBody = $('#tBody');
   const tGame = $('#tGame'), tGameText = $('#tGameText'), tGameSub = $('#tGameSub');
   const PROMPT = 'C:\\Users\\Visitor>';
@@ -227,11 +236,11 @@ checkArrow();
     explore() {
       print('Here’s what’s waiting for you:');
       print('');
-      printHTML('01. <a href="#top">About Me</a>');
-      printHTML('02. <a href="#mood">Current Status</a>');
-      printHTML('03. <a href="#questions">FAQ</a>');
-      printHTML('04. <a href="#note">A Quick Message</a>');
-      printHTML('05. <a href="#links">Find Me Online</a>');
+      printHTML('01. <a href="index.html">About Me</a>');
+      printHTML('02. <a href="fun.html#mood">Current Status</a>');
+      printHTML('03. <a href="index.html#questions">FAQ</a>');
+      printHTML('04. <a href="index.html#note">A Quick Message</a>');
+      printHTML('05. <a href="index.html#links">Find Me Online</a>');
       print('');
       print('Go have a look around!');
     },
@@ -271,7 +280,7 @@ checkArrow();
       print('');
       printHTML('Instagram: <a href="https://www.instagram.com/chezcxaaaaa" target="_blank" rel="noopener">@chezcxaaaaa</a>');
       printHTML('GitHub: <a href="https://github.com/ChezcaZarina" target="_blank" rel="noopener">@ChezcaZarina</a>');
-      printHTML('Other: <a href="#links">see the Find Me section</a>');
+      printHTML('Other: <a href="index.html#links">see the Find Me section</a>');
       print('');
       print('Feel free to say hi!');
     },
@@ -407,35 +416,35 @@ checkArrow();
 
   if (!reduce && 'IntersectionObserver' in window) {
     const targets = document.querySelectorAll(
-      'section > h2, section > .sub, details, .moodrow, .hug, .term, .chips, .links a, .hero > div'
+            'section > h2, section > .sub, details, .moodrow, .hug, .term, .chips, .links a, .hero > div, .daycard, .daygo'
     );
     const seen = new Map();            // counts siblings so they appear one after another
     const io = new IntersectionObserver(entries => {
-  entries.forEach(en => {
-    if (en.isIntersecting) en.target.classList.add('show');
-    else en.target.classList.remove('show');     // reset when it leaves the screen
-  });
-}, { threshold: 0, rootMargin: '0px 0px -60px 0px' });
+      entries.forEach(en => {
+        if (en.isIntersecting) en.target.classList.add('show');
+        else en.target.classList.remove('show');     // reset when it leaves the screen
+      });
+    }, { threshold: 0, rootMargin: '0px 0px -60px 0px' });
 
     targets.forEach(el => {
       const i = seen.get(el.parentElement) || 0;
       seen.set(el.parentElement, i + 1);
-     el.style.setProperty('--d', Math.min(i, 3) * 0.04 + 's');
+      el.style.setProperty('--d', Math.min(i, 3) * 0.04 + 's');
       el.classList.add('reveal');
       io.observe(el);
     });
   }
 
-   // FAQ: smooth open/close, and opening one closes the others
+  // FAQ: smooth open/close, and opening one closes the others
   const faqs = [...document.querySelectorAll('#questions details')];
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const T = { duration: 320, easing: 'cubic-bezier(.4, 0, .2, 1)' };
   const running = new WeakMap();
 
   function slide(d, toOpen) {
-    const from = d.offsetHeight;                 // where it is right now
-    running.get(d)?.cancel();                    // stop any animation in progress
-    const frame = d.offsetHeight - d.clientHeight;   // the border thickness
+    const from = d.offsetHeight;
+    running.get(d)?.cancel();
+    const frame = d.offsetHeight - d.clientHeight;
     d.style.overflow = 'hidden';
     d.dataset.closing = toOpen ? '' : '1';
     if (toOpen) d.open = true;
@@ -457,7 +466,7 @@ checkArrow();
 
   faqs.forEach(d => {
     d.querySelector('summary').addEventListener('click', e => {
-      e.preventDefault();                        // we handle opening ourselves
+      e.preventDefault();
       const opening = !d.open || d.dataset.closing === '1';
       if (reduceMotion) {
         faqs.forEach(o => { o.open = (o === d) ? opening : false; });
@@ -470,3 +479,200 @@ checkArrow();
     });
   });
 })();
+
+// ===== LINK TILES: tap to flip on touch screens =====
+const tiles = document.querySelectorAll('.tile');
+const canHover = matchMedia('(hover: hover)').matches;
+
+tiles.forEach(t => {
+  t.addEventListener('click', e => {
+    if (canHover) return;                    // mouse users: hover handles it
+    if (!t.classList.contains('flip')) {
+      e.preventDefault();                    // first tap: flip, don't open yet
+      tiles.forEach(x => x.classList.remove('flip'));
+      t.classList.add('flip');
+    }                                        // second tap: link opens normally
+  });
+});
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.tile')) tiles.forEach(x => x.classList.remove('flip'));
+});
+
+// ===== HOME: TODAY CARD (greeting, week, quest, day meter) =====
+if ($('#today')) {
+  const DAYS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+  const KEY = 'cheeze-done', RKEY = 'cheeze-rate';
+  const QUESTS = [
+    'Drink a glass of water.', 'Stretch for one minute.', 'Text someone you like.',
+    'Step outside for five minutes.', 'Tidy one tiny corner.', 'Eat something that isn’t a snack.',
+    'Put your phone down for ten minutes.', 'Write down one thing you’re looking forward to.',
+    'Take three slow breaths.', 'Listen to one song all the way through.',
+    'Say thanks to someone.', 'Fix one small thing you’ve been putting off.',
+    'Do something just because it’s fun.', 'Go to bed a little earlier.'
+  ];
+  const LABELS = [ "I'm cooked.",
+  "Not my day.",
+  "Getting by.",
+  "Pretty good.",
+  "We're so back."];
+  const REPLY = [  "Today really took it out of you. Hope you get a break.",
+  "Could've gone better, honestly. Hopefully tomorrow's nicer.",
+  "Nothing crazy, but we're getting through it.",
+  "Okay, that's a decent day. We take those.",
+  "Wait, a good day? Keep that energy going."];
+
+  // saved on this device only
+  let done = [], rates = {};
+  try { done = JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) {}
+  try { rates = JSON.parse(localStorage.getItem(RKEY)) || {}; } catch (e) {}
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(done)); } catch (e) {} };
+  const saveRates = () => { try { localStorage.setItem(RKEY, JSON.stringify(rates)); } catch (e) {} };
+
+  const key = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+
+  function streak(now) {
+    let s = 0;
+    const d = new Date(now);
+    if (!done.includes(key(d))) d.setDate(d.getDate() - 1);
+    while (done.includes(key(d))) { s++; d.setDate(d.getDate() - 1); }
+    return s;
+  }
+
+  function questFor(now) {
+    const dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 86400000);
+    return QUESTS[dayOfYear % QUESTS.length];
+  }
+
+  // draggable cheese meter: the slider runs 0 to 500, each 100 is one level
+  const meter = $('#meter');
+  let dragging = false;
+
+    // the label bubble that follows the cheese
+  const tip = $('#tip');
+  let tipTimer;
+
+  function showTip(v) {
+    const lv = Math.round(v / 100);
+    if (!lv) { tip.classList.remove('show'); return; }   // no label when unrated
+    const s = parseFloat(getComputedStyle(meter).getPropertyValue('--s')) || 64;
+    tip.textContent = LABELS[lv - 1];
+    tip.style.left = (s / 2 + (meter.clientWidth - s) * v / 500) + 'px';
+    tip.classList.add('show');
+  }
+
+  // after letting go: keep the label visible for a moment, then hide it
+  function flashTip() {
+    showTip(meter.value);
+    clearTimeout(tipTimer);
+    tipTimer = setTimeout(() => tip.classList.remove('show'), 1200);
+  }
+
+    // draws the cheese with a mouth that goes from sad (0) to happy (500)
+  function drawCheese(v) {
+       const cy = (24 + v / 500 * 10).toFixed(1);   // mouth curve: 24 frowns, 34 smiles
+    const svg =
+      "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'>" +
+      "<path d='M3 37V14Q3 11 6 10.5L34 4Q38 3.2 38 7V37Z' fill='#ffd978' stroke='#4a2c3f' stroke-width='2.5' stroke-linejoin='round'/>" +
+      "<circle cx='30' cy='14' r='3.2' fill='#f2be4d'/><circle cx='32' cy='30' r='2.8' fill='#f2be4d'/><circle cx='8' cy='31' r='2.2' fill='#f2be4d'/>" +
+      "<circle cx='14' cy='22' r='2.2' fill='#4a2c3f'/><circle cx='27' cy='22' r='2.2' fill='#4a2c3f'/>" +
+      "<path d='M15.5 29Q20.5 " + cy + " 25.5 29' fill='none' stroke='#4a2c3f' stroke-width='2' stroke-linecap='round'/>" +
+      "</svg>";
+    meter.style.setProperty('--cheese', 'url("data:image/svg+xml,' + encodeURIComponent(svg) + '")');
+  }
+
+  meter.addEventListener('pointerdown', () => { dragging = true; clearTimeout(tipTimer); showTip(meter.value); });
+  meter.addEventListener('pointerup', () => { dragging = false; });
+  meter.addEventListener('pointercancel', () => { dragging = false; });
+
+  // while dragging: the fill follows the cheese and the text previews the level
+  meter.addEventListener('input', () => {
+        drawCheese(meter.value);
+    meter.style.setProperty('--p', meter.value / 5);
+    const lv = Math.round(meter.value / 100);
+        showTip(meter.value);
+    $('#rMeta').textContent = lv ? REPLY[lv - 1] : 'Drag the cheese. No wrong answers.';
+  });
+
+  // on release: snap to the nearest level and save it
+  meter.addEventListener('change', () => {
+    dragging = false;
+    const lv = Math.round(meter.value / 100);
+    const k = key(new Date());
+    if (lv) rates[k] = lv; else delete rates[k];
+    saveRates();
+    render();
+        flashTip();
+  });
+
+  // keyboard: arrows move one level at a time
+  meter.addEventListener('keydown', e => {
+    const step = { ArrowRight: 1, ArrowUp: 1, ArrowLeft: -1, ArrowDown: -1 }[e.key];
+    if (!step) return;
+    e.preventDefault();
+    const k = key(new Date());
+    const lv = Math.max(0, Math.min(5, (rates[k] || 0) + step));
+    if (lv) rates[k] = lv; else delete rates[k];
+    saveRates();
+    render();
+        flashTip();
+  });
+  
+
+  function render() {
+    const now = new Date(), h = now.getHours();
+    let greet, line;
+    if (h < 5)       { greet = 'Hello, night owl.'; line = 'Rest counts too.'; }
+    else if (h < 12) { greet = 'Good morning.';     line = 'Hope today starts gently.'; }
+    else if (h < 17) { greet = 'Good afternoon.';   line = 'Have you had a snack yet?'; }
+    else if (h < 21) { greet = 'Good evening.';     line = 'You made it through another day.'; }
+    else             { greet = 'Hello, night owl.'; line = 'Rest counts too.'; }
+
+    $('#dHi').textContent = greet;
+    $('#dNote').textContent = line;
+    $('#dTime').textContent = now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    $('#dDate').textContent = now.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' });
+
+    // week strip, Monday to Sunday
+    const mon = new Date(now);
+    mon.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+    let html = '';
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(mon);
+      d.setDate(mon.getDate() + i);
+      const cls = 'wd' + (d.toDateString() === now.toDateString() ? ' today' : '') + (done.includes(key(d)) ? ' done' : '');
+      const r = rates[key(d)] || 0;
+      html += '<div class="' + cls + '"><span>' + DAYS[d.getDay()] + '</span><b>' + d.getDate() + '</b><i class="rbar" style="--r:' + r / 5 + '"></i></div>';
+    }
+    $('#week').innerHTML = html;
+
+    // the quest
+    const isDone = done.includes(key(now));
+    $('#qText').textContent = questFor(now);
+    $('#qBtn').setAttribute('aria-pressed', isDone);
+    const s = streak(now);
+    $('#qMeta').textContent = s > 1
+      ? s + ' days in a row. Nice.'
+      : (isDone ? 'Done for today. Nicely done.' : 'Tap it when you’ve done it. Saved on this device.');
+
+    // the meter
+    if (!dragging) {
+      const lv = rates[key(now)] || 0;
+      meter.value = lv * 100;
+      drawCheese(lv * 100);
+      meter.style.setProperty('--p', lv * 20);
+      meter.setAttribute('aria-valuetext', lv ? LABELS[lv - 1] : 'Not rated');
+            $('#rMeta').textContent = lv ? REPLY[lv - 1] : 'Drag the cheese. No wrong answers.';
+    }
+  }
+
+  $('#qBtn').addEventListener('click', () => {
+    const k = key(new Date());
+    done = done.includes(k) ? done.filter(x => x !== k) : done.concat(k);
+    save();
+    render();
+  });
+
+  render();
+  setInterval(render, 30000);
+}

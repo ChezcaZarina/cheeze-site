@@ -40,12 +40,18 @@ a { color: var(--yellow); }
 * { box-sizing: border-box; }
 
 header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 20px 24px;
+  /* the padding keeps your content in a 960px column while the bar's background spans the full width */
+  padding: 14px max(24px, calc((100% - 960px) / 2 + 24px));
+  background: rgba(42, 27, 39, .82);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
 }
 
 .logo {
@@ -168,7 +174,7 @@ main {
 }
 
 /* ===== SHARED SECTION STYLES ===== */
-html { scroll-behavior: smooth; scroll-padding-top: 20px; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
 
 section { padding: 40px 0; }
 
@@ -214,7 +220,7 @@ details p { margin: 0; padding: 0 20px 18px; }
 #note { text-align: center; }
 
 .env {
-  --h: min(560px, 80vh);   /* how tall the letter gets when opened */
+  --h: min(420px, 80vh);   /* how tall the letter gets when opened */
   position: relative;
   width: min(460px, 92vw);
   height: 200px;
@@ -310,34 +316,8 @@ details p { margin: 0; padding: 0 20px 18px; }
   transform: translateY(calc(82px - var(--h)));
 }
 
-/* ===== FIND ME LINKS ===== */
-.links {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-}
-
-@media (max-width: 600px) {
-  .links { grid-template-columns: repeat(2, 1fr); }
-}
-.links a {
-  display: block;
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: var(--cream);
-  background: var(--card);
-  border: 2px solid var(--yellow);
-  border-radius: 14px;
-  padding: 12px 16px;
-  transition: background .15s, color .15s;
-}
-
-.links a:hover { background: var(--yellow); color: var(--plum); }
-.links small { display: block; font-weight: 400; }
-
 /* ===== FOOTER + FOCUS RING ===== */
-footer { text-align: center; padding: 32px 24px 48px; }
+footer { text-align: center; padding: 16px 24px 40px; }
 
 :focus-visible { outline: 3px solid var(--yellow); outline-offset: 3px; }
 #cheese:focus:not(:focus-visible) { outline: none; }
@@ -562,9 +542,261 @@ footer { text-align: center; padding: 32px 24px 48px; }
 }
 
 @media (max-width: 600px) {
-  header { flex-direction: column; gap: 8px; }
+  header { flex-direction: column; gap: 4px; padding-top: 8px; padding-bottom: 8px; }
   nav { display: flex; flex-wrap: wrap; justify-content: center; }
-  nav a { padding: 6px 10px; }
+  nav a { padding: 4px 10px; }
+  html { scroll-padding-top: 110px; }
 }
 
 .tline input { font-size: 16px; }
+
+/* ===== FIND ME: FLIP TILES ===== */
+#links {
+  max-width: 860px;
+  margin: 40px auto 0;
+  padding: 36px 28px 32px;
+  text-align: center;
+  background: rgba(255, 238, 243, .04);
+  border: 1px solid rgba(255, 217, 120, .18);
+  border-radius: 28px;
+}
+
+.links {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.tile {
+  display: block;
+  perspective: 900px;
+  aspect-ratio: 2.1 / 1;      /* wide and short, like the concept */
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tile-in {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform .7s cubic-bezier(.2, .7, .2, 1);
+}
+
+.face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  text-align: center;
+  border: 1px solid rgba(255, 217, 120, .6);
+  border-radius: 22px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.front { background: #46293b; color: var(--yellow); }
+.front svg { width: 34px; height: auto; }
+.name { color: var(--cream); font-weight: 700; font-size: 1rem; }
+
+.back {
+  background: var(--yellow);
+  color: var(--plum);
+  border-color: var(--yellow);
+  transform: rotateY(180deg);
+  gap: 2px;
+}
+
+.handle {
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  font-size: clamp(1.2rem, 3.4vw, 1.6rem);
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+
+.open { font-size: .8rem; font-weight: 700; }
+
+/* flip: keyboard focus, tap (JS adds .flip), and mouse hover */
+.tile:focus-visible .tile-in,
+.tile.flip .tile-in { transform: rotateY(180deg); }
+
+@media (hover: hover) {
+  .tile:hover .tile-in { transform: rotateY(180deg); }
+}
+
+/* phones: 2 columns so the tiles don't get tiny */
+@media (max-width: 600px) {
+  #links { padding: 28px 16px 24px; border-radius: 22px; }
+  .links { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .tile { aspect-ratio: 1.6 / 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile-in { transition-duration: .01s; }
+}
+
+/* ===== PAGE HEADING (fun.html) ===== */
+.pagehead { padding: 24px 0 0; }
+.pagehead .sub { margin: 8px 0 0; }
+
+
+/* ===== HOME: TODAY CARD ===== */
+.daycard {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 24px;
+  align-items: center;
+  background: var(--card);
+  border: 2px solid var(--line);
+  border-radius: 22px;
+  padding: 26px;
+}
+.daydate { margin: 0; font-size: .9rem; letter-spacing: .04em; text-transform: uppercase; }
+.dayhi { font-size: clamp(1.8rem, 5vw, 2.6rem); margin: 4px 0 6px; }
+.daynote { margin: 0 0 14px; }
+.daytime { margin: 0; font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--yellow); }
+
+.week { display: flex; gap: 8px; justify-content: space-between; }
+.wd {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 0;
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  font-size: .8rem;
+}
+.wd b { font-size: 1.1rem; color: var(--cream); }
+.wd.today { background: var(--yellow); border-color: var(--yellow); color: var(--plum); }
+.wd.today b { color: var(--plum); }
+
+.daygo { margin: 14px 0 0; text-align: center; font-size: .95rem; }
+
+@media (max-width: 720px) { .daycard { grid-template-columns: 1fr; } }
+
+/* ===== TODAY CARD: QUEST + METER ===== */
+.quest { margin-top: 16px; border-top: 1px solid var(--line); padding-top: 14px; }
+.qlabel { margin: 0 0 8px; font-size: .8rem; letter-spacing: .04em; text-transform: uppercase; }
+.qbtn {
+  display: flex; gap: 12px; align-items: center; width: 100%;
+  text-align: left; font: inherit; color: var(--cream);
+  background: none; border: 1.5px solid var(--line); border-radius: 14px;
+  padding: 10px 14px; cursor: pointer; transition: border-color .15s;
+}
+.qbtn:hover { border-color: var(--yellow); }
+.qbox {
+  flex: none; width: 22px; height: 22px; border: 2px solid var(--yellow); border-radius: 7px;
+  display: grid; place-items: center; color: var(--plum); font-weight: 700; line-height: 1;
+}
+.qbtn[aria-pressed="true"] .qbox { background: var(--yellow); }
+.qbtn[aria-pressed="true"] .qbox::after { content: "✓"; }
+.qbtn[aria-pressed="true"] #qText { text-decoration: line-through; opacity: .7; }
+.qmeta { margin: 8px 0 0; font-size: .9rem; }
+
+.rate { margin-top: 14px; }
+.wd.done::after { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--yellow); }
+.wd.today.done::after { background: var(--plum); }
+.rbar { display: block; width: 60%; height: 4px; border-radius: 99px; background: var(--line); position: relative; overflow: hidden; }
+.rbar::after { content: ""; position: absolute; inset: 0; width: calc(var(--r) * 100%); background: var(--yellow); }
+.wd.today .rbar { background: rgba(74, 44, 63, .25); }
+.wd.today .rbar::after { background: var(--plum); }
+
+/* ===== DRAGGABLE CHEESE METER ===== */
+.rng {
+  --p: 0; 
+    --s: 64px;   /* cheese size: change this one number to resize */  /* fill amount, 0 to 100, set by JS */
+   --cheese: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M3 37V14Q3 11 6 10.5L34 4Q38 3.2 38 7V37Z' fill='%23ffd978' stroke='%234a2c3f' stroke-width='2.5' stroke-linejoin='round'/%3E%3Ccircle cx='30' cy='14' r='3.2' fill='%23f2be4d'/%3E%3Ccircle cx='32' cy='30' r='2.8' fill='%23f2be4d'/%3E%3Ccircle cx='8' cy='31' r='2.2' fill='%23f2be4d'/%3E%3Ccircle cx='14' cy='22' r='2.2' fill='%234a2c3f'/%3E%3Ccircle cx='27' cy='22' r='2.2' fill='%234a2c3f'/%3E%3Cpath d='M15.5 29Q20.5 34 25.5 29' fill='none' stroke='%234a2c3f' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+  -webkit-appearance: none;
+  appearance: none;
+  display: block;
+  width: 100%;
+    height: calc(var(--s) * 1.25);
+  margin: 0;
+  background: transparent;
+  cursor: grab;
+}
+.rng:active { cursor: grabbing; }
+
+.rng::-webkit-slider-runnable-track {
+  box-sizing: border-box;
+  height: 14px;
+  border-radius: 99px;
+  border: 1.5px solid var(--line);
+  background: linear-gradient(to right, var(--yellow) calc(var(--s) / 2 + (100% - var(--s)) * var(--p) / 100), transparent 0);
+}
+.rng::-moz-range-track {
+  box-sizing: border-box;
+  height: 14px;
+  border-radius: 99px;
+  border: 1.5px solid var(--line);
+  background: linear-gradient(to right, var(--yellow) calc(var(--s) / 2 + (100% - var(--s)) * var(--p) / 100), transparent 0);
+}
+
+.rng::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: var(--s);
+  height: var(--s);
+  margin-top: calc((14px - var(--s)) / 2);   /* keeps the cheese centered on the track */
+  border: 0;
+  border-radius: 0;
+  background: var(--cheese) center / contain no-repeat;
+  transition: transform .18s cubic-bezier(.3, 1.6, .5, 1);
+}
+.rng::-moz-range-thumb {
+  width: var(--s);
+  height: var(--s);
+  border: 0;
+  border-radius: 0;
+  background: var(--cheese) center / contain no-repeat;
+  transition: transform .18s cubic-bezier(.3, 1.6, .5, 1);
+}
+
+/* cheese grows while you hold it */
+.rng:active::-webkit-slider-thumb { transform: scale(1.2); }
+.rng:active::-moz-range-thumb { transform: scale(1.2); }
+.rate .qmeta { margin-top: 0; }
+
+/* label bubble that pops out above the cheese */
+.rwrap { position: relative; margin-top: 28px; }   /* the room for the bubble */
+.tip {
+  position: absolute;
+  bottom: 100%;
+  left: 0;                                  /* JS moves it with the cheese */
+  transform: translate(-50%, 8px) scale(.8);
+  transform-origin: 50% 100%;
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 2;
+  background: var(--card);
+  color: var(--cream);
+  border: 2px solid var(--yellow);
+  border-radius: 14px;
+  padding: 4px 12px;
+  font-weight: 700;
+  font-size: .9rem;
+  transition: opacity .15s, transform .2s cubic-bezier(.3, 1.6, .5, 1);
+}
+.tip.show { opacity: 1; transform: translate(-50%, 0) scale(1); }
+.tip::after {                               /* the little tail pointing at the cheese */
+  content: "";
+  position: absolute;
+  bottom: -7px;
+  left: 50%;
+  margin-left: -5px;
+  width: 10px;
+  height: 10px;
+  background: var(--card);
+  border-right: 2px solid var(--yellow);
+  border-bottom: 2px solid var(--yellow);
+  transform: rotate(45deg);
+}

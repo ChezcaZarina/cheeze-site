@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Fun Stuff · Cheeze</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&family=DM+Serif+Display&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <a class="logo" href="index.html">Cheeze</a>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="fun.html">Fun Stuff</a>
+    <a href="index.html#questions">FAQs</a>
+    <a href="index.html#note">Note</a>
+    <a href="index.html#links">Links</a>
+  </nav>
+</header>
+
+<main id="top">
+  <div class="pagehead">
+    <h1>The Fun Stuff</h1>
+    <p class="sub">Little experiments. More will show up here over time.</p>
+  </div>
+
+  <section id="mood">
+    <h2>How We Doing?</h2>
+    <p class="sub">Whatever's going on, we're here for it.</p>
+
+    <div class="moodrow">
+      <div class="moods" id="moods" role="group" aria-label="Pick a mood"></div>
+      <button class="next" id="next" aria-label="More moods">›</button>
+    </div>
+
+    <div class="hug" id="hug" aria-live="polite">
+      <p id="hugText">Whatever you’re feeling right now is okay here.</p>
+      <button class="more" id="more" hidden>Another one</button>
+    </div>
+  </section>
+
+  <section id="terminal">
+    <h2>The Command Center</h2>
+    <p class="sub">I put some commands here. Feel free to mess around.</p>
+
+    <div class="term" id="term">
+      <div class="termbar">
+        <span class="ttl">C:\Windows\System32\cmd.exe</span>
+        <span class="wc" aria-hidden="true"><b>&#8212;</b><b>&#9633;</b><b>&#10005;</b></span>
+      </div>
+      <div class="termbody" id="tBody">
+        <div id="tOut" aria-live="polite"></div>
+        <div class="game" id="tGame" hidden role="button" tabindex="0">
+          <div class="gbolt">&#9889;</div>
+          <div class="gtext" id="tGameText">WAIT FOR THE SIGNAL</div>
+          <small id="tGameSub">Click only when the terminal tells you to!</small>
+        </div>
+        <label class="tline">
+          <span class="prompt">C:\Users\Visitor&gt;</span>
+          <input id="tIn" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Type a command">
+        </label>
+      </div>
+    </div>
+    <div class="chips" id="tChips">
+      <button data-c="help">help</button>
+      <button data-c="about">about</button>
+      <button data-c="explore">explore</button>
+      <button data-c="reaction">reaction</button>
+    </div>
+  </section>
+</main>
+
+<footer>A work in progress, much like everything else.</footer>
+<script src="script.js"></script>
+</body>
+</html>
