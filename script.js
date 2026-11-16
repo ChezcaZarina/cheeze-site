@@ -61,31 +61,87 @@ if ($('#env')) {
 
 // ===== MOOD CHECK-IN (fun page only) =====
 if ($('#moods')) {
-  const moods = [
-    { name: 'Happy', say: 'Yay! Me too!', msgs: [
-      'I’m so glad. Let yourself soak it in for a minute.',
-      'Good days count. Notice this one.',
-      'Your happy is welcome here. Save a little of it for later.' ] },
-    { name: 'Overwhelmed', say: 'One thing at a time.', msgs: [
-      'Pick just one tiny thing. Everything else can wait.',
-      'You don’t have to do it all today. Really.',
-      'Pause. Unclench your shoulders. You’re doing better than you think.' ] },
-    { name: 'Anxious', say: 'I’m right here.', msgs: [
-      'Try one slow breath in, and a longer one out. You’re safe in this moment.',
-      'You don’t have to solve everything right now. Just the next small thing.',
-      'Worries feel loud, but they aren’t always true. You’ve gotten through hard days before.' ] },
-    { name: 'Alone', say: 'I’m right here.', msgs: [
-      'You’re not as alone as it feels. I’m glad you’re here.',
-      'Feeling lonely doesn’t mean something is wrong with you. It means you want connection, and that’s human.',
-      'Maybe send one small message to someone you trust. Or just stay here a while.' ] },
-    { name: 'Sad', say: 'Sending a big squish.', msgs: [
-      'It’s okay to feel this. You don’t have to hurry it along.',
-      'I’m sorry it hurts today. You’re not alone with it.',
-      'Soft days are allowed. Be as kind to yourself as you would to a friend.' ] },
-    { name: 'Tired', say: 'Sleepy cheese hugs.', msgs: [
-      'Being tired is a signal, not a failure. Rest is allowed.',
-      'You’ve been carrying a lot. You can put some of it down.',
-      'Water, a stretch, maybe a nap. Be gentle with yourself.' ] }
+    const moods = [
+    { name: 'Happy', say: "Yay, we're back!", msgs: [
+      "Love this for you. Soak it in for a bit.",
+      "Someone's having a good day. We love to see it!",
+      "Whatever's going right, I hope it keeps going.",
+      "A good day is a good day. Notice this one.",
+      "Treat yourself a little today, just because.",
+      "Your happy is welcome here. Enjoy it!"
+    ] },
+
+    { name: 'Overwhelmed', say: "One thing at a time.", msgs: [
+      "Okay, that's a lot. Let's not try to do it all at once.",
+      "Pick one small thing and start there. Just that one for now.",
+      "If someone can take even one thing off your plate, it's okay to let them.",
+      "Not everything needs your attention right this second.",
+      "It's a lot right now, and that's okay. You're allowed to go slow.",
+      "Try writing it all down. It's easier to handle when it's not all in your head."
+    ] },
+
+    { name: 'Anxious', say: "I'm right here.", msgs: [
+      "Your brain has a lot of tabs open. Try closing one.",
+      "I know it's easier said than done, but you don't have to figure it all out today.",
+      "Whatever happens, you'll handle it when you get there.",
+      "Take a slow breath. In for a few seconds, out a little longer.",
+      "Worries can sound louder than they really are. Give it a minute.",
+      "You've gotten through rough days before, and you'll get through this one too."
+    ] },
+
+    { name: 'Alone', say: "Hey, you're here.", msgs: [
+      "You're worth checking in on, too.",
+      "A quiet day doesn't mean you're forgotten.",
+      "Feeling alone doesn't mean something is wrong with you.",
+      "I'm glad you're here, even if it's just for a little while.",
+      "Maybe do something small that feels comforting, like a favorite song or a snack.",
+      "Reaching out to someone is always an option, but only if you feel like it."
+    ] },
+
+    { name: 'Sad', say: "Sending a hug.", msgs: [
+      "I hope tomorrow is a little kinder to you.",
+      "You don't have to pretend you're fine here.",
+      "It's okay if today isn't your favorite. We've all had those days.",
+      "Maybe wrap yourself in something warm for a bit.",
+      "Be gentle with yourself today. You deserve the same kindness you'd give a friend.",
+      "Let yourself feel it for a bit. It's okay to not be okay today."
+    ] },
+
+    { name: 'Tired', say: "Time for a break?", msgs: [
+      "Have you had some water today? Just checking.",
+      "You've earned a little do-nothing time.",
+      "The to-do list can wait. It has no choice.",
+      "Go rest. The world can manage without you for a bit.",
+      "Being tired is your body asking for a break. Maybe listen to it.",
+      "Even ten minutes lying down with your eyes closed can help."
+    ] },
+
+    { name: 'Numb', say: "That's okay too.", msgs: [
+      "Feeling nothing is still a feeling. You don't have to force anything.",
+      "You don't have to figure out what you feel right now.",
+      "A warm shower or a change of scenery might help you feel a bit more present.",
+      "Some days are just quiet inside. That's okay.",
+      "Doing something with your hands can help, like tidying, doodling, or cooking something simple.",
+      "If this feeling sticks around for a while, talking to someone you trust can help."
+    ] },
+
+    { name: 'Bored', say: "Let's find something fun.", msgs: [
+      "Boredom usually means you're ready for something new.",
+      "Reorganize a drawer or a playlist. It's weirdly satisfying.",
+      "Maybe poke around the terminal on this page. Just a thought.",
+      "Bored days can be oddly good for ideas.",
+      "Do something small and silly. It counts.",
+      "Try something you've been curious about but never started."
+    ] },
+
+    { name: 'Mad', say: "Okay, that's valid.", msgs: [
+      "You're allowed to be mad. Your feelings make sense.",
+      "Give it a minute before you react to anything.",
+      "Maybe let it out safely: a fast walk, loud music, or a pillow to yell into.",
+      "If you want to send a message, it's okay to wait a bit before you do.",
+      "Anger usually means something matters to you. That's worth noticing.",
+      "A little space can help. You can come back to it when you're ready."
+    ] }
   ];
 
   const box = $('#moods');
@@ -93,13 +149,13 @@ if ($('#moods')) {
   const hugText = $('#hugText');
   const more = $('#more');
   const next = $('#next');
+  const brLink = $('#brLink');
   let current = null, idx = 0;
 
-  function showMessage() {
+    function showMessage() {
     hugText.textContent = current.msgs[idx % current.msgs.length];
+    brLink.hidden = !['Anxious', 'Overwhelmed'].includes(current.name);
     hug.classList.remove('pop');
-    void hug.offsetWidth;
-    hug.classList.add('pop');
   }
 
   moods.forEach(m => {
@@ -675,4 +731,364 @@ if ($('#today')) {
 
   render();
   setInterval(render, 30000);
+}
+
+// ===== FUN PAGE: COVERFLOW PANELS =====
+if ($('#cfStage')) {
+  const stage = $('#cfStage');
+  const panels = [...stage.querySelectorAll('.panel')];
+  const dotsBox = $('#cfDots');
+  const n = panels.length;
+  const SIZE = [1, .82, .68], FADE = [1, .45, .2];   // by distance from the center
+  let active = 0, first = true;
+
+  const dots = dotsBox ? panels.map((p, i) => {
+    const b = document.createElement('button');
+    b.setAttribute('aria-label', 'Show panel ' + (i + 1));
+    b.onclick = () => go(i);
+    dotsBox.appendChild(b);
+    return b;
+  }) : [];
+
+  function render() {
+    const half = Math.floor(n / 2);
+    panels.forEach((p, i) => {
+      const d = ((i - active + n + half) % n) - half;   // -1 left, 0 center, 1 right (loops around)
+      const a = Math.abs(d);
+      const prev = +p.dataset.d;
+      const snap = first || Math.abs(d - prev) > 1;      // a panel wrapping around jumps instead of flying across
+      if (snap) p.style.transition = 'none';
+      p.style.setProperty('--d', d);
+      p.style.setProperty('--s', SIZE[a] ?? .6);
+      p.style.setProperty('--o', FADE[a] ?? 0);
+      p.style.zIndex = 3 - a;
+      p.style.pointerEvents = a > 2 ? 'none' : '';
+      p.classList.toggle('active', d === 0);
+      if (p.tagName === 'A') p.tabIndex = d === 0 ? 0 : -1;
+      p.dataset.d = d;
+      if (snap) { void p.offsetWidth; p.style.transition = ''; }
+    });
+    dots.forEach((b, i) => b.setAttribute('aria-current', i === active));
+    first = false;
+  }
+
+  function go(i) { active = (i + n) % n; render(); }
+
+  $('#cfPrev').onclick = () => go(active - 1);
+  $('#cfNext').onclick = () => go(active + 1);
+
+  // clicking a side panel brings it to the center instead of opening it
+  panels.forEach((p, i) => p.addEventListener('click', e => {
+    if (i !== active) { e.preventDefault(); go(i); }
+  }));
+
+  // swipe / drag left and right
+  let startX = null, moved = false;
+  stage.addEventListener('pointerdown', e => { startX = e.clientX; moved = false; });
+  stage.addEventListener('pointerup', e => {
+    if (startX === null) return;
+    const dx = e.clientX - startX;
+    startX = null;
+    if (Math.abs(dx) > 40) { moved = true; go(active + (dx < 0 ? 1 : -1)); }
+  });
+  stage.addEventListener('click', e => {               // a swipe shouldn't also open a link
+    if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; }
+  }, true);
+
+  render();
+}
+
+// ===== FUN PAGE: BREATHING CIRCLE =====
+if ($('#br')) {
+  const circle = $('#brCircle'), word = $('#brWord'), count = $('#brCount');
+  const startBtn = $('#brStart'), meta = $('#brMeta');
+  const modeBtns = [...document.querySelectorAll('#brModes .mood')];
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // each step: [what to say, seconds, how big the circle gets]
+  const MODES = {
+    calm:  [['Breathe in', 4, 1], ['Breathe out', 6, .55]],
+    box:   [['Breathe in', 4, 1], ['Hold', 4, 1], ['Breathe out', 4, .55], ['Hold', 4, .55]],
+    sleep: [['Breathe in', 4, 1], ['Hold', 7, 1], ['Breathe out', 8, .55]]
+  };
+
+  let mode = 'calm', running = false, step = 0, rounds = 0, left = 0, phaseTimer, tickTimer;
+
+  function setScale(s, secs) {
+    circle.style.transitionDuration = reduce ? '0s' : secs + 's';
+    circle.style.transform = 'scale(' + s + ')';
+  }
+
+  function showRounds() {
+    meta.textContent = rounds
+      ? rounds + (rounds === 1 ? ' round' : ' rounds') + ' done. Nice.'
+      : '';
+  }
+
+  function runPhase() {
+    const [label, secs, target] = MODES[mode][step];
+    word.textContent = label;
+    circle.classList.toggle('hold', label === 'Hold');
+    setScale(target, secs);
+
+    left = secs;
+    count.textContent = left;
+    clearInterval(tickTimer);
+    tickTimer = setInterval(() => { left--; if (left > 0) count.textContent = left; }, 1000);
+
+    clearTimeout(phaseTimer);
+    phaseTimer = setTimeout(() => {
+      step++;
+      if (step >= MODES[mode].length) { step = 0; rounds++; showRounds(); }
+      runPhase();
+    }, secs * 1000);
+  }
+
+  function start() {
+    running = true;
+    step = 0;
+    rounds = 0;
+    showRounds();
+    startBtn.textContent = 'Stop';
+    runPhase();
+  }
+
+  function stop() {
+    running = false;
+    clearTimeout(phaseTimer);
+    clearInterval(tickTimer);
+    circle.classList.remove('hold');
+    setScale(.55, 1.2);
+    word.textContent = 'Ready?';
+    count.textContent = '';
+    startBtn.textContent = 'Start';
+    if (rounds) meta.textContent = rounds + (rounds === 1 ? ' round' : ' rounds') + '. Hope that helped.';
+  }
+
+  startBtn.addEventListener('click', () => running ? stop() : start());
+
+  modeBtns.forEach(b => b.addEventListener('click', () => {
+    mode = b.dataset.mode;
+    modeBtns.forEach(x => x.setAttribute('aria-pressed', x === b));
+    if (running) { step = 0; runPhase(); }
+  }));
+
+  // stop if the tab is hidden, so it doesn't keep counting in the background
+  document.addEventListener('visibilitychange', () => { if (document.hidden && running) stop(); });
+}
+
+// ===== FUN PAGE: CHEESE CATCHER =====
+if ($('#game')) {
+  const canvas = $('#game');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const FLOOR = H - 14;
+  const SANS = '"DM Sans", sans-serif', SERIF = '"DM Serif Display", serif', HAND = 'Caveat, cursive';
+
+  // the mascot's body outline, reused for every cheese
+  const CHEESE = new Path2D('M42 256 L42 170 Q42 150 62 146 L236 104 Q262 98 262 126 L262 256 Z');
+
+  const plate = { x: W / 2, y: H - 40, w: 110, h: 14, pop: 0 };
+
+  // ----- game state -----
+  let state = 'ready';                  // 'ready', 'playing' or 'over'
+  let score = 0, lives = 3, combo = 0;
+  let cheeses = [], pops = [];          // cheese on screen, and little floating texts
+  let spawnIn = 0, last = 0, overAt = 0, newBest = false, onScreen = true;
+
+  let best = 0;                         // saved on this device, like your reaction time
+  try { best = JSON.parse(localStorage.getItem('cheeze-catcher-best')) || 0; } catch (e) {}
+
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const multiplier = () => 1 + Math.min(3, Math.floor(combo / 5));   // x1, x2, x3, x4
+
+  // ----- controls -----
+  function movePlate(x) { plate.x = clamp(x, plate.w / 2, W - plate.w / 2); }
+
+  function toGameX(e) {
+    const r = canvas.getBoundingClientRect();
+    return (e.clientX - r.left) * (W / r.width);     // screen pixels -> game pixels
+  }
+
+  function canStart() { return state !== 'playing' && performance.now() - overAt > 700; }
+
+  canvas.addEventListener('pointermove', e => movePlate(toGameX(e)));
+  canvas.addEventListener('pointerdown', e => {
+    movePlate(toGameX(e));
+    if (canStart()) start();
+  });
+
+  canvas.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); movePlate(plate.x - 40); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); movePlate(plate.x + 40); }
+    else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (canStart()) start(); }
+  });
+
+  // only play while the game is on screen, so you don't lose lives while scrolled away
+  new IntersectionObserver(([en]) => { onScreen = en.isIntersecting; }, { threshold: 0.3 }).observe(canvas);
+
+  // ----- game flow -----
+  function start() {
+    state = 'playing';
+    score = 0; lives = 3; combo = 0;
+    cheeses = []; pops = [];
+    spawnIn = 0.6;
+  }
+
+  function gameOver() {
+    state = 'over';
+    overAt = performance.now();
+    cheeses = [];
+    newBest = score > best;
+    if (newBest) {
+      best = score;
+      try { localStorage.setItem('cheeze-catcher-best', JSON.stringify(best)); } catch (e) {}
+    }
+  }
+
+  function spawn() {
+    const faster = Math.min(1 + score * 0.025, 2.2);   // the more you score, the faster it falls
+    cheeses.push({
+      x: 30 + Math.random() * (W - 60),
+      y: -30,
+      size: 40 + Math.random() * 14,
+      speed: (90 + Math.random() * 60) * faster,
+      rot: Math.random() * 6.28,
+      spin: (Math.random() - .5) * 2
+    });
+  }
+
+  function update(dt) {
+    plate.pop = Math.max(0, plate.pop - dt * 4);
+    pops.forEach(p => { p.y -= 40 * dt; p.life -= dt; });
+    pops = pops.filter(p => p.life > 0);
+
+    if (state !== 'playing' || !onScreen) return;
+
+    spawnIn -= dt;
+    if (spawnIn <= 0) {
+      spawn();
+      spawnIn = Math.max(0.45, 1.3 - score * 0.015) * (0.8 + Math.random() * 0.5);
+    }
+
+    cheeses = cheeses.filter(c => {
+      c.y += c.speed * dt;
+      c.rot += c.spin * dt;
+      const bottom = c.y + c.size * 0.35;
+
+      // caught: its bottom reached the plate, and it's above the plate's top, and over the plate
+      if (bottom >= plate.y && c.y < plate.y + plate.h &&
+          Math.abs(c.x - plate.x) < plate.w / 2 + c.size * 0.3) {
+        combo++;
+        const m = multiplier();
+        score += m;
+        plate.pop = 1;
+        pops.push({ x: c.x, y: plate.y - 10, text: '+' + m, life: 0.8 });
+        return false;                                   // false = remove this cheese
+      }
+
+      // missed: it hit the floor
+      if (bottom >= FLOOR) {
+        lives--;
+        combo = 0;
+        pops.push({ x: c.x, y: FLOOR - 10, text: 'miss', life: 0.8, bad: true });
+        return false;
+      }
+      return true;                                      // still falling, keep it
+    });
+
+    if (lives <= 0) gameOver();
+  }
+
+  // ----- drawing -----
+  function dot(x, y, r, color) {
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  function drawCheese(c) {
+    ctx.save();
+    ctx.translate(c.x, c.y);
+    ctx.rotate(c.rot);
+    const s = c.size / 220;
+    ctx.scale(s, s);
+    ctx.translate(-152, -180);
+
+    ctx.fillStyle = '#ffd978';
+    ctx.fill(CHEESE);
+    ctx.lineWidth = 10;
+    ctx.lineJoin = 'round';
+    ctx.strokeStyle = '#4a2c3f';
+    ctx.stroke(CHEESE);
+
+    dot(226, 150, 17, '#f2be4d');
+    dot(74, 236, 12, '#f2be4d');
+    dot(122, 196, 13, '#4a2c3f');
+    dot(186, 196, 13, '#4a2c3f');
+    ctx.restore();
+  }
+
+  function write(str, x, y, font, color, align) {
+    ctx.font = font;
+    ctx.fillStyle = color;
+    ctx.textAlign = align || 'left';
+    ctx.fillText(str, x, y);
+  }
+
+  function hud() {
+    write('Score ' + score, 16, 30, '700 20px ' + SANS, '#ffeef3');
+    write('Best ' + best, W - 16, 30, '700 16px ' + SANS, '#c9a9b9', 'right');
+    for (let i = 0; i < lives; i++) drawCheese({ x: W / 2 - 40 + i * 40, y: 24, size: 28, rot: 0 });
+    if (combo >= 5) write('x' + multiplier() + ' combo!', W / 2, 64, '700 26px ' + HAND, '#ffd978', 'center');
+  }
+
+  function overlay() {
+    ctx.fillStyle = 'rgba(27, 16, 34, .78)';
+    ctx.fillRect(0, 0, W, H);
+    if (state === 'ready') {
+      write('Cheese Catcher', W / 2, 150, '400 46px ' + SERIF, '#ffeef3', 'center');
+      write('Catch the cheese. Three misses and it’s over.', W / 2, 190, '400 18px ' + SANS, '#c9a9b9', 'center');
+      if (best) write('Best: ' + best, W / 2, 224, '700 18px ' + SANS, '#ffd978', 'center');
+      write('tap to start', W / 2, 276, '700 32px ' + HAND, '#ffd978', 'center');
+    } else {
+      write('Game over', W / 2, 140, '400 46px ' + SERIF, '#ffeef3', 'center');
+      write('Score ' + score + '  ·  Best ' + best, W / 2, 184, '700 20px ' + SANS, '#c9a9b9', 'center');
+      if (newBest) write('New best!', W / 2, 222, '700 30px ' + HAND, '#ffd978', 'center');
+      write('tap to play again', W / 2, 276, '700 32px ' + HAND, '#ffd978', 'center');
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+
+    ctx.fillStyle = 'rgba(255, 217, 120, .15)';
+    ctx.fillRect(0, FLOOR, W, 14);
+
+    cheeses.forEach(drawCheese);
+
+    ctx.fillStyle = plate.pop > .3 ? '#ffd978' : '#ffeef3';   // flashes yellow when you catch
+    ctx.beginPath();
+    ctx.roundRect(plate.x - plate.w / 2, plate.y + plate.pop * 3, plate.w, plate.h, 8);
+    ctx.fill();
+
+    pops.forEach(p => {
+      ctx.globalAlpha = Math.min(1, p.life / .4);
+      write(p.text, p.x, p.y, '700 22px ' + SANS, p.bad ? '#ff9ebb' : '#ffd978', 'center');
+    });
+    ctx.globalAlpha = 1;
+
+    if (state === 'playing') hud(); else overlay();
+  }
+
+  // ----- the loop -----
+  function loop(now) {
+    const dt = Math.min((now - last) / 1000, 0.05);
+    last = now;
+    update(dt);
+    draw();
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(t => { last = t; loop(t); });
 }

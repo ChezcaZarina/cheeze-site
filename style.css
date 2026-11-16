@@ -800,3 +800,228 @@ footer { text-align: center; padding: 16px 24px 40px; }
   border-bottom: 2px solid var(--yellow);
   transform: rotate(45deg);
 }
+
+/* ===== FUN PAGE: COVERFLOW PANELS ===== */
+.cfstage {
+  position: relative;
+  height: 330px;
+  overflow: hidden;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.panel {
+  --d: 0; --s: 1; --o: 1;          /* JS sets these: position, size, brightness */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(280px, 72%);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--card);
+  border: 2px solid var(--line);
+  border-radius: 20px;
+  padding: 14px;
+  text-decoration: none;
+  opacity: var(--o);
+  transform: translate(-50%, -50%) translateX(calc(var(--d) * 95%)) scale(var(--s));
+  transition: transform .5s cubic-bezier(.2, .7, .2, 1), opacity .5s, border-color .2s;
+}
+.panel.active { border-color: var(--yellow); }
+
+.panel h3 {
+  margin: 8px 0 0;
+  font-family: 'DM Serif Display', serif;
+  font-weight: 400;
+  font-size: 1.3rem;
+  color: var(--cream);
+}
+.panel p { margin: 0; color: var(--mauve); font-size: .95rem; }
+.pgo { margin-top: auto; padding-top: 6px; color: var(--yellow); font-weight: 700; font-size: .9rem; }
+
+.cfnav { display: flex; justify-content: center; gap: 12px; margin-top: 8px; }
+
+.cfdots { display: flex; justify-content: center; gap: 8px; margin-top: 16px; }
+.cfdots button {
+  width: 8px; height: 8px; padding: 0; border: 0; border-radius: 99px;
+  background: var(--line); cursor: pointer;
+  transition: width .25s, background .25s;
+}
+.cfdots button[aria-current="true"] { width: 22px; background: var(--yellow); }
+
+/* the little previews */
+.pv { height: 110px; border-radius: 12px; overflow: hidden; pointer-events: none; }
+
+.pv-mood {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  align-content: center; justify-content: center;
+  padding: 12px;
+  background: rgba(255, 238, 243, .04);
+}
+.pv-mood span {
+  border: 1.5px solid var(--line);
+  border-radius: 99px;
+  padding: 3px 14px;
+  font-size: .85rem;
+  color: var(--mauve);
+}
+.pv-mood span.on { border-color: var(--yellow); color: var(--cream); }
+
+.pv-term {
+  background: #1b1022;
+  padding: 12px;
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: .78rem;
+  line-height: 1.5;
+  color: var(--yellow);
+}
+.pv-term .dim { color: var(--mauve); }
+
+.panel.soon { border-style: dashed; }
+.pv-soon {
+  display: grid; place-items: center;
+  font-family: 'DM Serif Display', serif;
+  font-size: 2.6rem;
+  color: var(--yellow);
+  background: rgba(255, 217, 120, .06);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel { transition: none; }
+}
+
+/* ===== FUN PAGE: BREATHING CIRCLE ===== */
+.br {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  padding: 32px 20px;
+  background: rgba(255, 238, 243, .04);
+  border: 1px solid rgba(255, 217, 120, .18);
+  border-radius: 28px;
+}
+
+.br-ring {
+  position: relative;
+  width: min(300px, 78vw);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1.5px dashed var(--line);      /* the "full breath" guide */
+}
+
+.br-circle {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 40%, #ffe9a3, var(--yellow) 60%, #f2be4d);
+  box-shadow: 0 0 60px rgba(255, 217, 120, .35);
+  transform: scale(.55);                 /* starts small */
+  transition-property: transform;
+  transition-timing-function: ease-in-out;
+  transition-duration: 1s;               /* JS changes this for each phase */
+}
+
+.br-circle.hold { animation: brglow 2s ease-in-out infinite; }
+@keyframes brglow { 50% { box-shadow: 0 0 90px rgba(255, 217, 120, .55); } }
+
+.br-text {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  line-height: 1.1;
+  color: var(--plum);
+  pointer-events: none;
+}
+
+.br-word {
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  font-size: clamp(1.5rem, 6vw, 2rem);
+}
+
+.br-count {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2.2rem;
+}
+
+.br-modes { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+
+.br-start { border: 0; font: inherit; font-weight: 700; cursor: pointer; min-width: 130px; }
+
+.br-meta {
+  margin: 0;
+  min-height: 1.6em;
+  font-family: 'Caveat', cursive;
+  font-size: 1.4rem;
+  color: var(--yellow);
+}
+
+/* coverflow preview */
+.pv-breathe { display: grid; place-items: center; background: rgba(255, 217, 120, .06); }
+.pv-breathe i {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 40%, #ffe9a3, var(--yellow) 60%, #f2be4d);
+  animation: pvbreath 5s ease-in-out infinite;
+}
+@keyframes pvbreath { 50% { transform: scale(.6); } }
+
+@media (max-width: 600px) { .br { padding: 24px 14px; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .br-circle.hold, .pv-breathe i { animation: none; }
+}
+/* coverflow preview: cheese catcher */
+.pv-catch { position: relative; background: #1b1022; }
+.pv-catch svg {
+  position: absolute;
+  top: -40px;
+  width: 34px;
+  animation: pvfall 2.4s ease-in infinite;
+}
+.pv-catch .c1 { left: 30%; }
+.pv-catch .c2 { left: 62%; width: 28px; animation-delay: 1.2s; }
+.pv-catch .plate {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  width: 70px;
+  height: 8px;
+  margin-left: -35px;
+  border-radius: 8px;
+  background: var(--cream);
+}
+@keyframes pvfall {
+  0%   { transform: translateY(0) rotate(0); opacity: 1; }
+  75%  { transform: translateY(115px) rotate(35deg); opacity: 1; }
+  100% { transform: translateY(115px) rotate(35deg); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pv-catch svg { animation: none; top: 20px; }
+}
+/* ===== FUN PAGE: CHEESE CATCHER ===== */
+.cg {
+  max-width: 640px;
+  background: #1b1022;
+  border: 2px solid var(--line);
+  border-radius: 22px;
+  overflow: hidden;
+}
+
+#game {
+  display: block;
+  width: 100%;        /* stretch to fit the box */
+  height: auto;
+  touch-action: none; /* dragging on the game won't scroll the page */
+}
+#game:focus-visible { outline-offset: -4px; }

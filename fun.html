@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Fun Stuff · Cheeze</title>
+  <title>Explore</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&family=DM+Serif+Display&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -12,7 +12,7 @@
   <a class="logo" href="index.html">Cheeze</a>
   <nav>
     <a href="index.html">Home</a>
-    <a href="fun.html">Fun Stuff</a>
+    <a href="fun.html">Explore</a>
     <a href="index.html#questions">FAQs</a>
     <a href="index.html#note">Note</a>
     <a href="index.html#links">Links</a>
@@ -21,9 +21,65 @@
 
 <main id="top">
   <div class="pagehead">
-    <h1>The Fun Stuff</h1>
-    <p class="sub">Little experiments. More will show up here over time.</p>
+    <h1>Take Your Pick</h1>
+    <p class="sub">A few things to click, try, and get distracted by. More will show up here over time.</p>
   </div>
+
+    <section id="panels" aria-label="What to explore">
+    <div class="cfstage" id="cfStage">
+
+      <a class="panel" href="#mood" draggable="false">
+        <div class="pv pv-mood" aria-hidden="true">
+          <span>Happy</span><span class="on">Tired</span><span>Sad</span><span>Mad</span>
+        </div>
+        <h3>How We Doing?</h3>
+        <p>Pick a mood and get a little message back.</p>
+        <span class="pgo">Take me there →</span>
+      </a>
+
+      <a class="panel" href="#terminal" draggable="false">
+        <div class="pv pv-term" aria-hidden="true">
+          <div>C:\Users\Visitor&gt; help</div>
+          <div class="dim">Available commands:</div>
+          <div class="dim">about &nbsp; secret &nbsp; reaction</div>
+          <div>C:\Users\Visitor&gt; _</div>
+        </div>
+        <h3>The Command Center</h3>
+        <p>A tiny fake terminal with hidden commands, plus a reaction test to try.</p>
+        <span class="pgo">Take me there →</span>
+      </a>
+
+      <a class="panel" href="#breathe" draggable="false">
+  <div class="pv pv-breathe" aria-hidden="true"><i></i></div>
+  <h3>Just Breathe</h3>
+  <p>A slow little circle to breathe along with.</p>
+  <span class="pgo">Take me there →</span>
+</a>
+      <a class="panel" href="#catcher" draggable="false">
+  <div class="pv pv-catch" aria-hidden="true">
+    <svg class="c1" viewBox="0 0 40 40"><path d="M3 37V14Q3 11 6 10.5L34 4Q38 3.2 38 7V37Z" fill="#ffd978" stroke="#4a2c3f" stroke-width="2.5" stroke-linejoin="round"/><circle cx="14" cy="22" r="2.2" fill="#4a2c3f"/><circle cx="27" cy="22" r="2.2" fill="#4a2c3f"/><path d="M15.5 29Q20.5 34 25.5 29" fill="none" stroke="#4a2c3f" stroke-width="2" stroke-linecap="round"/></svg>
+    <svg class="c2" viewBox="0 0 40 40"><path d="M3 37V14Q3 11 6 10.5L34 4Q38 3.2 38 7V37Z" fill="#ffd978" stroke="#4a2c3f" stroke-width="2.5" stroke-linejoin="round"/><circle cx="14" cy="22" r="2.2" fill="#4a2c3f"/><circle cx="27" cy="22" r="2.2" fill="#4a2c3f"/></svg>
+    <i class="plate"></i>
+  </div>
+  <h3>Cheese Catcher</h3>
+  <p>Slide the plate and catch the falling cheese. Three misses and it's over.</p>
+  <span class="pgo">Take me there →</span>
+</a>
+
+      <div class="panel soon">
+        <div class="pv pv-soon" aria-hidden="true">?</div>
+        <h3>More soon</h3>
+        <p>New stuff shows up here over time.</p>
+      </div>
+
+    </div>
+
+    <div class="cfnav">
+      <button class="next" id="cfPrev" aria-label="Previous panel">‹</button>
+      <button class="next" id="cfNext" aria-label="Next panel">›</button>
+    </div>
+    <div class="cfdots" id="cfDots"></div>
+  </section>
 
   <section id="mood">
     <h2>How We Doing?</h2>
@@ -35,10 +91,44 @@
     </div>
 
     <div class="hug" id="hug" aria-live="polite">
-      <p id="hugText">Whatever you’re feeling right now is okay here.</p>
-      <button class="more" id="more" hidden>Another one</button>
-    </div>
+  <p id="hugText">Give yourself a little room to feel</p>
+  <button class="more" id="more" hidden>Another one</button>
+  <a class="more" id="brLink" href="#breathe" hidden>Try the breathing circle →</a>
+</div>
   </section>
+
+  <section id="breathe">
+  <h2>Just Breathe</h2>
+  <p class="sub">Follow the circle. No rush, no wrong way.</p>
+
+  <div class="br" id="br">
+    <div class="br-ring">
+      <div class="br-circle" id="brCircle"></div>
+      <div class="br-text">
+        <span class="br-word" id="brWord" aria-live="polite">Ready?</span>
+        <span class="br-count" id="brCount" aria-hidden="true"></span>
+      </div>
+    </div>
+
+    <div class="br-modes" id="brModes" role="group" aria-label="Breathing pattern">
+      <button class="mood" data-mode="calm" aria-pressed="true">Calm 4 · 6</button>
+      <button class="mood" data-mode="box" aria-pressed="false">Box 4 · 4 · 4 · 4</button>
+      <button class="mood" data-mode="sleep" aria-pressed="false">Sleepy 4 · 7 · 8</button>
+    </div>
+
+    <button class="btn br-start" id="brStart">Start</button>
+    <p class="br-meta" id="brMeta"></p>
+  </div>
+</section>
+
+<section id="catcher">
+  <h2>Cheese Catcher</h2>
+  <p class="sub">Move the plate. Catch the cheese. Don't let it hit the floor.</p>
+
+  <div class="cg">
+    <canvas id="game" width="640" height="400" tabindex="0" aria-label="Cheese Catcher game. Move your mouse or finger to slide the plate, or use the left and right arrow keys. Press Enter to start."></canvas>
+  </div>
+</section>
 
   <section id="terminal">
     <h2>The Command Center</h2>
