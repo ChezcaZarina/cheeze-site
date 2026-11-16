@@ -883,7 +883,7 @@ if ($('#game')) {
   const ctx = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
   const FLOOR = H - 14;
-  const SANS = '"DM Sans", sans-serif', SERIF = '"DM Serif Display", serif', HAND = 'Caveat, cursive';
+  const SANS = '"Figtree", sans-serif', SERIF = '"Fraunces", serif', HAND = 'Caveat, cursive';
 
   // the mascot's body outline, reused for every cheese
   const CHEESE = new Path2D('M42 256 L42 170 Q42 150 62 146 L236 104 Q262 98 262 126 L262 256 Z');
